@@ -7,7 +7,7 @@ var score
 
 func _ready():
 	randomize()
-	new_game()
+	# new_game()
 # Declare member variables here. Examples:
 # var a = 2
 # var b = "text"
@@ -25,12 +25,18 @@ func _on_Player_hit():
 func game_over():
 	$ScoreTimer.stop()
 	$MobTimer.stop()
+	$HUD.show_game_over()
+	# $HUD.update_score(score)
+	
 
 func new_game():
+	get_tree().call_group("mobs", "queue_free")
 	score = 0
 	$Player.start($StartPosition.position)
 	$StartTimer.start()
-
+	
+	$HUD.update_score(score)
+	$HUD.show_message("Get Ready")
 
 func _on_MobTimer_timeout():
 	# Choose a random location on Path2D.
@@ -51,6 +57,7 @@ func _on_MobTimer_timeout():
 
 func _on_ScoreTimer_timeout():
 	score += 1
+	$HUD.update_score(score)
 
 
 func _on_StartTimer_timeout():
